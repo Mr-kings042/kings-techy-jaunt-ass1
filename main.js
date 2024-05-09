@@ -12,7 +12,7 @@ const { BankAccount, Transaction } = require('./models');
 // create middleware app
 app.use(bodyParser.json());
 // mongoDB url
-const dBUrl = 'mongodb://localhost:27017/mrkingsBankApp';
+const dBUrl = 'mongodb://localhost:27017/';
 
 
 
