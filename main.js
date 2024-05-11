@@ -24,7 +24,7 @@ mongoose.connect(dBUrl)
   console.error('Error connecting to MongoDB:', err)});
 
 // FETCHING ALL ACCOUNTS
-  app.get('/accounts/', async (req, res) => {
+  app.get('/BankAccount/', async (req, res) => {
     try {
         const accounts  = await BankAccount.find();
         res.status(200).json(accounts);
@@ -37,7 +37,7 @@ mongoose.connect(dBUrl)
 });
 
 // CREATING ACCOUNT
-app.post('/cars/', async (req, res) => {
+app.post('/BankAccount/', async (req, res) => {
   const { accountNumber, firstName, lastName } = req.body;
   try {
     const existingAccount = await BankAccount.find({ 
@@ -77,7 +77,7 @@ app.post('/cars/', async (req, res) => {
 });
 
 // FETCHING SINGLE ACCOUNTS
-app.get('/accounts/:id/', async (req, res) => {
+app.get('/BankAccount/:id/', async (req, res) => {
   accountId = req.params.id;
  await BankAccount.findById(accountId)
  .then((account) => {
@@ -96,7 +96,7 @@ app.get('/accounts/:id/', async (req, res) => {
 });
  
 // DELETING ACCOUNT
-app.delete('/accounts/:id', async (req, res) => {
+app.delete('/BankAccount/:id', async (req, res) => {
   accountId = req.params.id;
   
     await BankAccount.findById(accountId)
@@ -124,7 +124,7 @@ app.delete('/accounts/:id', async (req, res) => {
 });
 
 // UPDATE ACCOUNT
-app.put('/accounts/:id', async (req, res) => {
+app.put('/BankAccount/:id', async (req, res) => {
   const { accountNumber, firstName, lastName, balance } = req.body;
   accountId = req.params.id;
   let updatedAccount = await BankAccount.findByIdAndUpdate(
@@ -143,7 +143,7 @@ app.put('/accounts/:id', async (req, res) => {
 });
 
 // FETCH ALL TRANSACTION FOR AN ACCOUNT
-app.get('/accounts/:id/transactions', async (req, res) => {
+app.get('/Transactions/:id/transactions', async (req, res) => {
   
   const accountId = req.params.id;
   try {
@@ -164,7 +164,7 @@ app.get('/accounts/:id/transactions', async (req, res) => {
 });
 
 // WITHDRAWAL LIMIT
-app.put('/accounts/:id/withdraw', async (req, res) => {
+app.put('/Transactions/:id/withdraw', async (req, res) => {
   const accountId = req.params.id;
   const { amount } = req.body;
 
@@ -204,7 +204,7 @@ app.put('/accounts/:id/withdraw', async (req, res) => {
     });
 
 // DEPOSIT
-app.put('/accounts/:id/deposit', async (req, res) => {
+app.put('/Transactions/:id/deposit', async (req, res) => {
   const accountId = req.params.id;
   const { amount } = req.body;
 
