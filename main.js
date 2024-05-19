@@ -1,18 +1,21 @@
 // install express
-const express = require ('express');
+const express = require('express');
 // install mongoose
 const mongoose = require('mongoose');
 // install middleware
 const bodyParser = require('body-parser');
+//install dotenv
+const _ = require('dotenv').config();
 // assign port and create express app
 const app = express();
-const port = 5000;
+const port = process.env.port;
 // import models
 const { BankAccount, Transaction } = require('./models');
 // create middleware app
 app.use(bodyParser.json());
 // mongoDB url
-const dBUrl = 'mongodb://localhost:27017/';
+const dBUrl = process.env.DB_URI;
+const JWTSECRET = process.env.JWTSECRET;
 
 
 
@@ -31,7 +34,7 @@ mongoose.connect(dBUrl)
     } catch (error) {
         console.log(error.message);
         res.status(500).json({
-            error: "Error Fetching Accounts"
+            error: "Error Fetching BankAccounts"
         });
     }
 });
