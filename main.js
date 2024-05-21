@@ -10,21 +10,27 @@ const _ = require('dotenv').config();
 const app = express();
 const port = process.env.port;
 // import models
-const { BankAccount, Transaction } = require('./models');
+const { BankAccount, Transaction } = require('./models/BankAccount');
 // create middleware app
 app.use(bodyParser.json());
 // mongoDB url
 const dBUrl = process.env.DB_URI;
 const JWTSECRET = process.env.JWTSECRET;
+const connectDB = require('./config/dbconn');
 
+connectDB();
 
+let accounts = [
+  { id: 1, accountNumber: '1234567890', accountHolder: 'John Doe', balance: 1000.0 },
+  { id: 2, accountNumber: '9876543210', accountHolder: 'Jane Doe', balance: 500.0 },
+];
 
 // Connect to MongoDB
-mongoose.connect(dBUrl)
-.then(() =>{
- console.log('Connected to MongoDB.....')})
-.catch((err) =>  {
-  console.error('Error connecting to MongoDB:', err)});
+// mongoose.connect(dBUrl)
+// .then(() =>{
+//  console.log('Connected to MongoDB.....')})
+// .catch((err) =>  {
+//   console.error('Error connecting to MongoDB:', err)});
 
 // FETCHING ALL ACCOUNTS
   app.get('/BankAccount/', async (req, res) => {
