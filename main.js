@@ -20,11 +20,6 @@ const connectDB = require('./config/dbconn');
 
 connectDB();
 
-let accounts = [
-  { id: 1, accountNumber: '1234567890', accountHolder: 'John Doe', balance: 1000.0 },
-  { id: 2, accountNumber: '9876543210', accountHolder: 'Jane Doe', balance: 500.0 },
-];
-
 // Connect to MongoDB
 // mongoose.connect(dBUrl)
 // .then(() =>{
