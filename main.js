@@ -20,13 +20,6 @@ const connectDB = require('./config/dbconn');
 
 connectDB();
 
-// Connect to MongoDB
-// mongoose.connect(dBUrl)
-// .then(() =>{
-//  console.log('Connected to MongoDB.....')})
-// .catch((err) =>  {
-//   console.error('Error connecting to MongoDB:', err)});
-
 // FETCHING ALL ACCOUNTS
   app.get('/BankAccount/', async (req, res) => {
     try {
