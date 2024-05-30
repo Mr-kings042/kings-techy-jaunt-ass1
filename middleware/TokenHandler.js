@@ -2,7 +2,6 @@ const jwt = require('jsonwebtoken');
 const asynchandler = require('express-async-handler');
 
 
-// const JWTSECRET = 'bankaccount'; 
 const JWTSECRET = process.env.JWTSECRET // JWT Secret Key
 
 const verifyToken = asynchandler(async (req, res, next) => { 

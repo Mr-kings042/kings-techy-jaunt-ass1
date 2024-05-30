@@ -46,22 +46,25 @@ class BankAccount{
     }
 
    deposit(amount){
+    if (amount <= 0){
+        return "deposit amount must be positive";
+    }
         this._Balance += amount;
         this._Transactions.push(new Transaction('deposit',amount));
     }
     getDailyWithdrawalTotal(){
        let total = 0;
-       currentDate = new Date();
-       this_Transactions.forEach(transaction => {
+       let currentDate = new Date();
+      this._Transactions.forEach(transaction => {
         if(transaction.timestamp.getDate() === currentDate.getDate()) {
             total += transaction.amount;
         }
        });
     
-       return transactionSum;
+       return total;
     }
      withdraw (amount){
-        if(this.getDailyWithdrawalTotal() + amount > this_DailyWithdrawal){
+        if(this.getDailyWithdrawalTotal() + amount > this._DailyWithdrawal){ 
             return "Daily withdrawal limit exceeded";
         }
         if (amount > this._Balance) {
@@ -85,7 +88,7 @@ class BankAccount{
         getTransactions(){
             let transactions = [];
         
-            this_Transactions.forEach(transaction => {
+            this._Transactions.forEach(transaction => {
                 transactions.push(transaction.toObject());
             });
             return transactions;
@@ -111,11 +114,11 @@ account2.transfer(500, account1);
 // Get the transactions
 const transactions = account1.getTransactions;
 // testing for account 1
-console.log(`Account Holder: ${account1.FirstName}, ${account1.LastName}`);
+console.log(`Account Holder: ${account1._FirstName}, ${account1._LastName}`);
 console.log(`Account Number: ${account1.AccountNumber}`);
 console.log(`Balance: ${account1.Balance}`);
 // testing for account 2
-console.log(`Account Holder: ${account2.FirstName}, ${account2.LastName}`);
+console.log(`Account Holder: ${account2._FirstName}, ${account2._LastName}`);
 console.log(`Account Number: ${account2.AccountNumber}`);
 console.log(`Balance: ${account2.Balance}`);
 console.log(`Transactions:`);
@@ -126,7 +129,7 @@ for (let i = 0; i < (transactions.length); i++) {
 
   // test final account display
   console.log(` Account name: ${account1._FirstName}, ${account1._LastName}, Account number: ${account1.AccountNumber}, Balance: ₦${account1._Balance}`);
-  console.log(`Account name ${account2.FirstName}, ${account2.LastName}, Account number: ${account2.AccountNumber}, Balance: ₦${account2._Balance}`);
+  console.log(`Account name ${account2._FirstName}, ${account2._LastName}, Account number: ${account2.AccountNumber}, Balance: ₦${account2._Balance}`);
 
 
 

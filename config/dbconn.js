@@ -5,13 +5,13 @@ const dBUri = process.env.DB_URI;
 const connectDB = async () => {
     mongoose.connect(dBUri)
         .then(() => {
-            console.log('Connected to MongoDB...')
+            console.log('Successively Connected to MongoDB...')
         })
         .catch((err) => {
             console.log('Failed to connect to MongoDB...', err)
         });
 }
 
-// connectDB();
+
 
 module.exports = connectDB;
