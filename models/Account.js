@@ -40,29 +40,30 @@ const AccountSchema = new mongoose.Schema(
         type: mongoose.Schema.Types.ObjectId, 
         ref: 'Transaction' }]
   });
-  AccountSchema.methods.withdraw = async function (amount) {
-    if (amount > this.balance) {
-      throw new Error('Insufficient funds');
-    }
-    if (this.withdrawnToday + amount > this.dailyWithdrawalLimit) {
-      throw new Error('Daily withdrawal limit exceeded');
-    }
-    this.balance -= amount;
-    this.withdrawnToday = (this.withdrawnToday || 0) + amount;
-    const transaction = new Transaction({ type: 'withdrawal', amount, accountId: this._id });
-    this.transactions.push(transaction);
-    await this.save(); // Save updated account and transaction
-    await transaction.save(); // Explicitly save the transaction
-    return transaction; // Return the created transaction object
-  };
+
+  // AccountSchema.methods.withdraw = async function (amount) {
+  //   if (amount > this.balance) {
+  //     return "Insufficient funds";
+  //   }
+  //   if (this.withdrawnToday + amount > this.dailyWithdrawalLimit) {
+  //     return "Daily withdrawal limit exceeded";
+  //   }
+  //   this.balance -= amount;
+  //   this.withdrawnToday = (this.withdrawnToday || 0) + amount;
+  //   const transaction = new Transaction({ type: 'withdrawal', amount, accountId: this._id });
+  //   this.transactions.push(transaction);
+  //   await this.save(); // Save updated account and transaction
+  //   await transaction.save(); //  save the transaction
+  //   return transaction; // Return the created transaction object
+  // };
   
-  AccountSchema.methods.deposit = async function (amount) {
-    this.balance += amount;
-    const transaction = new Transaction({ type: 'deposit', amount, accountId: this._id });
-    this.transactions.push(transaction);
-    await this.save(); // Save updated account and transaction
-    await transaction.save(); // Explicitly save the transaction
-    return transaction; // Return the created transaction object
-  };
-  
+  // AccountSchema.methods.deposit = async function (amount) {
+  //   this.balance += amount;
+  //   const transaction = new Transaction({ type: 'deposit', amount, accountId: this._id });
+  //   this.transactions.push(transaction);
+  //   await this.save(); // Save updated account and transaction
+  //   await transaction.save(); // save the transaction
+  //   return transaction; // Return the created transaction object
+  // };
+
   module.exports = mongoose.model('Account',AccountSchema)

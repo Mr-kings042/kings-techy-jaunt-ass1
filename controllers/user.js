@@ -20,13 +20,16 @@ const getUsers = asynchandler(async (req,res) => {
 });
 
 const createUser = asynchandler (async (req,res) => {
-const {username, email,password} = req.body;
+const { username, email, password }  = req.body;
 // check if all field are inputed
 if (!username || !email || !password) {
     return res.status(400).json({
         error: "Username, Email and Password fields are required"
     });
 }
+// hash users password
+const hashPassword = await bcrypt.hash(password, 10);
+
 try {
     // Create a new user
     const newUser = new User({
@@ -43,7 +46,7 @@ try {
 } catch (error) {
     // Handle any errors that occur during saving
     res.status(500).json({
-        error: "An error occurred while saving the owner"
+        error: "An error occurred while saving new user"
     });
 }
 });

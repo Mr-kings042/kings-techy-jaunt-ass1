@@ -15,13 +15,16 @@ const UserSchema = new mongoose.Schema({
     password:
      { type: String,
          required: true,
-         select: false,
          min: 5,
          max: 1024
         },
     accounts: [{
          type: mongoose.Schema.Types.ObjectId, 
-        ref: 'Account' }]
+        ref: 'Account',
+        required: false,
+        default: null
+
+    }]
   },
   {
     timestamps: true

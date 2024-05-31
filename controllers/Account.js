@@ -126,7 +126,9 @@ const getAccountTransactions = asynchandler(async(req, res) =>{
 });
 const getAccountBalance = asynchandler (async (req,res) =>{
     const accountId = req.params.id;
-    await Account.findById(accountId)
+
+    // check account ID
+   const account = await Account.findById(accountId)
     .then((account) => {
        if (!account) {
          return res.status(404).json({
@@ -145,24 +147,48 @@ const getAccountBalance = asynchandler (async (req,res) =>{
 
 const getAccountwithdrawals = asynchandler(async (req,res) =>{
     const accountId = req.params.id;
-    const amount = req.body.amount;
-  
+    const amount = req.body;
+
+//   check if amount input is a number and check if amount is greater than account balance
     if (!amount || typeof amount !== 'number') {
       return res.status(400).json({
         error: 'Invalid withdrawal amount'});
     }
-  
+ 
+// check account ID      
     const account = await Account.findById(accountId);
     if (!account) {
       return res.status(404).json({
         error:'Account not found'});
     }
-  
+    // check if the funds is sufficient
+    if (amount > account.balance) {
+      return res.status(400).json({
+           error: 'Insufficient funds' });
+    }
+//   check withdrawal limit
+    if ((account.withdrawnToday || 0) + amount > account.dailyWithdrawalLimit) {
+        return res.status(400).json({ 
+            error: 'Daily withdrawal limit exceeded' });
+      }
+    
+    
+
     
   
     try {
-      const transaction = await account.withdraw(amount);
-      
+  //  create new transaction
+      const transaction = new Transaction({
+         type: 'withdrawal',
+          amount, 
+          accountId: account._id });
+          // update account balance
+      account.balance -= amount;
+      account.withdrawnToday = (account.withdrawnToday || 0) + amount;
+      account.transactions.push(transaction);
+    
+      await account.save();
+      await transaction.save(); //save the transaction
       res.status(200).json(transaction); // Return the created transaction object
     } 
     catch (error) {
@@ -174,12 +200,13 @@ const getAccountwithdrawals = asynchandler(async (req,res) =>{
 const getAccountDeposit = asynchandler(async (req,res) =>{
     const accountId = req.params.id;
     const amount = req.body.amount;
-  
+    account.balance += amount;
+
     if (!amount || typeof amount !== 'number' && amount <= 0) {
       return res.status(400).json({
         error: 'Invalid deposit amount'});
     }
-  
+//   check account ID
     const account = await Account.findById(accountId);
     if (!account) {
         return res.status(400).json({
@@ -189,7 +216,15 @@ const getAccountDeposit = asynchandler(async (req,res) =>{
   
   
     try {
-      const transaction = await account.deposit(amount);
+    //   const transaction = await account.deposit(amount);
+    const transaction = new Transaction({ 
+        type: 'deposit',
+         amount, 
+         accountId: account._id });
+  account.transactions.push(transaction);
+
+  await account.save();
+  await transaction.save();
       res.status(200).json(transaction); // Return the created transaction object
     } catch (error) {
       return res.status(400).json({

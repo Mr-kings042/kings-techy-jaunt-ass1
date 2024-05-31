@@ -7,6 +7,7 @@ const{
     deleteUser,
     Userlogin,
 } = require('../controllers/user');
+
 const verifyToken = require('../middleware/TokenHandler');
 
 const router = express.Router();

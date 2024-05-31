@@ -29,7 +29,7 @@ const JWTSECRET = process.env.JWTSECRET;
 
 
 // creating routes
-app.use('/user', require('./routes/user'));
+app.use('/users', require('./routes/user'));
 app.use('/accounts', require('./routes/Account'));
 app.use('/transactions', require('./routes/Transaction'));
 
