@@ -3,13 +3,13 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const mongoose = require('mongoose');
 const User = require('../models/user');
-const Account = require('../models/Account');
+// const Account = require('../models/Account');
 
 const JWTSECRET = process.env.JWTSECRET;
 
 const getUsers = asynchandler(async (req,res) => {
     try {
-        const users = await Owner.find();
+        const users = await User.find();
         res.status(200).json(users);
     } catch (error) {
         console.log(error.message);
@@ -21,12 +21,24 @@ const getUsers = asynchandler(async (req,res) => {
 
 const createUser = asynchandler (async (req,res) => {
 const { username, email, password }  = req.body;
+
+    const salt = await bcrypt.genSalt(10);
+ 
+        
 // check if all field are inputed
 if (!username || !email || !password) {
     return res.status(400).json({
         error: "Username, Email and Password fields are required"
     });
 }
+  // Check if the email is already in use
+  const existingUser = await User.findOne({ email,username });
+  if (existingUser) {
+    return res.status(400).json({
+      error: "Username or Email is already in use"
+    });
+  }
+
 // hash users password
 const hashPassword = await bcrypt.hash(password, 10);
 
@@ -76,7 +88,7 @@ const updateUser = asynchandler(async (req, res) => {
    
     const isUserIDValid = mongoose.Types.ObjectId.isValid(userID);
     
-    if (!isOwnerIDValid) {
+    if (!isUserIDValid) {
         return res.status(400).json({
             error: "Invalid Owner ID"
         });
@@ -96,7 +108,7 @@ const updateUser = asynchandler(async (req, res) => {
     }
 
     // check if user exist
-    await Owner.findById(userID)
+    await User.findById(userID)
         .then((user) => {
             if (!user) {
                 return res.status(404).json({
@@ -110,7 +122,7 @@ const updateUser = asynchandler(async (req, res) => {
             });
         });
 
-    let owner = await Owner.findByIdAndUpdate(
+    let user = await User.findByIdAndUpdate(
         userID,
         { username: username, email: email },
         { new: true }
@@ -176,7 +188,8 @@ const Userlogin = asynchandler(async (req, res) => {
         });
     }
 
-    const token = jwt.sign({ id: user._id, email: user.email }, JWTSECRET, { expiresIn: '5h' });
+    const token = jwt.sign({ 
+        id: user._id, email: user.email }, JWTSECRET, { expiresIn: '5h' });
     res.status(200).json({
         token: token
     })
@@ -189,5 +202,4 @@ module.exports = {
     updateUser,
     deleteUser,
     Userlogin,
-
 };
