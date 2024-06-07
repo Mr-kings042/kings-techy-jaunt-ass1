@@ -38,7 +38,7 @@ if (!username || !email || !password) {
       error: "Username or Email is already in use"
     });
   }
-
+// Hash password
 // hash users password
 const hashPassword = await bcrypt.hash(password, 10);
 
