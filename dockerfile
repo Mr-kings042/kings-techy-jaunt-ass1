@@ -2,7 +2,7 @@
 
 # use an existing node slim as a base image
 # FROM node:22-slim
-FROM node:21-alpine
+FROM node:22-slim
 
 # Set the working directory in the container to /app
 WORKDIR /app
